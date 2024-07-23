@@ -1,0 +1,47 @@
+name: Terraform Destroy
+
+on:
+  workflow_dispatch:  # This allows you to manually trigger the workflow
+  push:
+    branches:
+      - destroy-branch  # Replace with the branch name you want to use to trigger the destroy
+
+jobs:
+  terraform-destroy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.9.1
+
+    - name: Terraform Init
+      run: terraform init
+      env:
+        TF_VAR_snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+        TF_VAR_snowflake_username: ${{ secrets.SNOWFLAKE_USERNAME }}
+        TF_VAR_snowflake_password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+        # TF_VAR_snowflake_region: ${{ secrets.SNOWFLAKE_REGION }}
+        TF_VAR_snowflake_role: ${{ secrets.SNOWFLAKE_ROLE }}
+
+    - name: Terraform Plan Destroy
+      run: terraform plan -destroy
+      env:
+        TF_VAR_snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+        TF_VAR_snowflake_username: ${{ secrets.SNOWFLAKE_USERNAME }}
+        TF_VAR_snowflake_password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+        # TF_VAR_snowflake_region: ${{ secrets.SNOWFLAKE_REGION }}
+        TF_VAR_snowflake_role: ${{ secrets.SNOWFLAKE_ROLE }}
+
+    - name: Terraform Destroy
+      run: terraform destroy -auto-approve
+      env:
+        TF_VAR_snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+        TF_VAR_snowflake_username: ${{ secrets.SNOWFLAKE_USERNAME }}
+        TF_VAR_snowflake_password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+        # TF_VAR_snowflake_region: ${{ secrets.SNOWFLAKE_REGION }}
+        TF_VAR_snowflake_role: ${{ secrets.SNOWFLAKE_ROLE }}
