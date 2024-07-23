@@ -1,6 +1,6 @@
 # Define the Snowflake database
-resource "snowflake_database" "NW_DBA1" {
-  name                     = "NW_DBA1"
+resource "snowflake_database" "NW_DBA" {
+  name                     = "NW_DBA"
   data_retention_time_in_days = 3
 
   lifecycle {
@@ -10,7 +10,7 @@ resource "snowflake_database" "NW_DBA1" {
 
 # Define the Snowflake schema
 resource "snowflake_schema" "file_schema" {
-  database           = snowflake_database.NW_DBA1.name
+  database           = snowflake_database.NW_DBA.name
   name               = "CUSTOMER_SCHEMA"
   is_transient       = false
   is_managed         = false
@@ -28,7 +28,7 @@ resource "snowflake_role" "role_data_analyst" {
 
 # Grant privileges to the roles on the database
 resource "snowflake_database_grant" "db_grant" {
-  database_name      = snowflake_database.NW_DBA1.name
+  database_name      = snowflake_database.NW_DBA.name
   privilege          = "USAGE"
   roles              = [snowflake_role.role_data_analyst.name]
   with_grant_option  = false
@@ -36,7 +36,7 @@ resource "snowflake_database_grant" "db_grant" {
 
 # Grant privileges to the roles on the schema
 resource "snowflake_schema_grant" "sch_grant" {
-  database_name      = snowflake_database.NW_DBA1.name
+  database_name      = snowflake_database.NW_DBA.name
   schema_name        = snowflake_schema.file_schema.name
   privilege          = "USAGE"
   roles              = [snowflake_role.role_developer.name]
