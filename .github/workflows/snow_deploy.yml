@@ -26,14 +26,19 @@ jobs:
 
     - name: Terraform Plan
       run: terraform plan
+      env:
+        TF_VAR_snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+        TF_VAR_snowflake_username: ${{ secrets.SNOWFLAKE_USERNAME }}
+        TF_VAR_snowflake_password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+        # TF_VAR_snowflake_region: ${{ secrets.SNOWFLAKE_REGION }}
+        TF_VAR_snowflake_role: ${{ secrets.SNOWFLAKE_ROLE }}
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/dev'
       run: terraform apply -auto-approve
-
       env:
-        SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-        SNOWFLAKE_USERNAME: ${{ secrets.SNOWFLAKE_USERNAME }}
-        SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
-        SNOWFLAKE_REGION: ${{ secrets.SNOWFLAKE_REGION }}
-        SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+        TF_VAR_snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+        TF_VAR_snowflake_username: ${{ secrets.SNOWFLAKE_USERNAME }}
+        TF_VAR_snowflake_password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+        # TF_VAR_snowflake_region: ${{ secrets.SNOWFLAKE_REGION }}
+        TF_VAR_snowflake_role: ${{ secrets.SNOWFLAKE_ROLE }}
