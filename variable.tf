@@ -1,20 +1,20 @@
 # Specifying Variables
 
-variable "SNOWFLAKE_ACCOUNT" {
+variable "snowflake_account" {
     description = "Snowflake account details"
 }
 
-variable "SNOWFLAKE_USERNAME" {
+variable "snowflake_username" {
     description = "Snowflake user details"
 
 }
 
-variable "SNOWFLAKE_PASSWORD" {
+variable "snowflake_password" {
     description = "Snowflake user password"
 }
 
 
-variable "SNOWFLAKE_ROLE" {
+variable "snowflake_role" {
     description = "Snowflake Roles"
 }
 
