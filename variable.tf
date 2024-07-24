@@ -6,7 +6,6 @@ variable "snowflake_account" {
 
 variable "snowflake_username" {
     description = "Snowflake user details"
-
 }
 
 variable "snowflake_password" {
