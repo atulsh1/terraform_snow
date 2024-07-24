@@ -4,7 +4,7 @@ on:
   workflow_dispatch:  # This allows you to manually trigger the workflow
   push:
     branches:
-      - destroy-branch  # Replace with the branch name you want to use to trigger the destroy
+      - dev  # Replace with the branch name you want to use to trigger the destroy
 
 jobs:
   terraform-destroy:
