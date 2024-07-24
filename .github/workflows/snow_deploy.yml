@@ -35,7 +35,7 @@ jobs:
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/dev'
-      run: terraform destroy -auto-approve
+      run: terraform apply -auto-approve
       env:
         TF_VAR_snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
         TF_VAR_snowflake_username: ${{ secrets.SNOWFLAKE_USERNAME }}
