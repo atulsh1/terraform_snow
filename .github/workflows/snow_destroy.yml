@@ -1,10 +1,10 @@
 name: Terraform Destroy
 
 on:
-  workflow_dispatch:  # This allows you to manually trigger the workflow
+  workflow_dispatch:  # Allows manual triggering
   push:
     branches:
-      - dev  # Replace with the branch name you want to use to trigger the destroy
+      - dev 
 
 jobs:
   terraform-destroy:
@@ -25,23 +25,20 @@ jobs:
         TF_VAR_snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
         TF_VAR_snowflake_username: ${{ secrets.SNOWFLAKE_USERNAME }}
         TF_VAR_snowflake_password: ${{ secrets.SNOWFLAKE_PASSWORD }}
-        # TF_VAR_snowflake_region: ${{ secrets.SNOWFLAKE_REGION }}
         TF_VAR_snowflake_role: ${{ secrets.SNOWFLAKE_ROLE }}
 
     - name: Terraform Plan Destroy
-      run: terraform plan -destroy
+      run: terraform plan -destroy -out=destroy.plan
       env:
         TF_VAR_snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
         TF_VAR_snowflake_username: ${{ secrets.SNOWFLAKE_USERNAME }}
         TF_VAR_snowflake_password: ${{ secrets.SNOWFLAKE_PASSWORD }}
-        # TF_VAR_snowflake_region: ${{ secrets.SNOWFLAKE_REGION }}
         TF_VAR_snowflake_role: ${{ secrets.SNOWFLAKE_ROLE }}
 
-    - name: Terraform Destroy
-      run: terraform destroy -auto-approve
+    - name: Terraform Apply Destroy Plan
+      run: terraform apply -auto-approve destroy.plan
       env:
         TF_VAR_snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
         TF_VAR_snowflake_username: ${{ secrets.SNOWFLAKE_USERNAME }}
         TF_VAR_snowflake_password: ${{ secrets.SNOWFLAKE_PASSWORD }}
-        # TF_VAR_snowflake_region: ${{ secrets.SNOWFLAKE_REGION }}
         TF_VAR_snowflake_role: ${{ secrets.SNOWFLAKE_ROLE }}
