@@ -1,0 +1,44 @@
+name: Terraform Deploy
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.9.1
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Validate
+      run: terraform validate
+
+    - name: Terraform Plan
+      run: terraform plan
+      env:
+        TF_VAR_snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+        TF_VAR_snowflake_username: ${{ secrets.SNOWFLAKE_USERNAME }}
+        TF_VAR_snowflake_password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+        # TF_VAR_snowflake_region: ${{ secrets.SNOWFLAKE_REGION }}
+        TF_VAR_snowflake_role: ${{ secrets.SNOWFLAKE_ROLE }}
+
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/dev'
+      run: terraform apply -auto-approve
+      env:
+        TF_VAR_snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+        TF_VAR_snowflake_username: ${{ secrets.SNOWFLAKE_USERNAME }}
+        TF_VAR_snowflake_password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+        # TF_VAR_snowflake_region: ${{ secrets.SNOWFLAKE_REGION }}
+        TF_VAR_snowflake_role: ${{ secrets.SNOWFLAKE_ROLE }}

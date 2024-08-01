@@ -1,0 +1,44 @@
+name: Terraform Destroy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - dev  # Replace with the branch you are using
+
+jobs:
+  terraform-destroy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.9.1
+
+    - name: Terraform Init
+      run: terraform init
+      env:
+        TF_VAR_snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+        TF_VAR_snowflake_username: ${{ secrets.SNOWFLAKE_USERNAME }}
+        TF_VAR_snowflake_password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+        TF_VAR_snowflake_role: ${{ secrets.SNOWFLAKE_ROLE }}
+
+    - name: Terraform Plan Destroy
+      run: terraform plan -destroy -out=destroy.plan
+      env:
+        TF_VAR_snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+        TF_VAR_snowflake_username: ${{ secrets.SNOWFLAKE_USERNAME }}
+        TF_VAR_snowflake_password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+        TF_VAR_snowflake_role: ${{ secrets.SNOWFLAKE_ROLE }}
+
+    - name: Terraform Apply Destroy Plan
+      run: terraform apply -auto-approve destroy.plan
+      env:
+        TF_VAR_snowflake_account: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+        TF_VAR_snowflake_username: ${{ secrets.SNOWFLAKE_USERNAME }}
+        TF_VAR_snowflake_password: ${{ secrets.SNOWFLAKE_PASSWORD }}
+        TF_VAR_snowflake_role: ${{ secrets.SNOWFLAKE_ROLE }}
